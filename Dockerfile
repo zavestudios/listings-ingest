@@ -3,19 +3,12 @@ FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-ARG AIRFLOW_VERSION=2.9.3
-ARG PYTHON_VERSION=3.11
-ARG AIRFLOW_CONSTRAINTS_URL=https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt
-
-# Copy and install Python dependencies
-COPY requirements.txt .
+COPY requirements-runner.txt .
 RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir -c "${AIRFLOW_CONSTRAINTS_URL}" -r requirements.txt
+    python -m pip install --no-cache-dir -r requirements-runner.txt
 
 # Copy application code
 COPY etl/ ./etl/
-COPY scripts/ ./scripts/
-COPY dags/ ./dags/
 
 # Compile Python files to bytecode for faster startup and smaller runtime footprint
 RUN python -m compileall -b /app

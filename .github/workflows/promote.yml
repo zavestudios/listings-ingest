@@ -1,0 +1,25 @@
+name: Promote ETL Runner Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      digest:
+        description: "Digest sha256:..."
+        required: true
+      environment:
+        description: "Environment tag (use bootstrap for gitops consumption)"
+        required: true
+
+permissions:
+  packages: write
+  id-token: write
+
+jobs:
+  promote:
+    uses: zavestudios/platform-pipelines/.github/workflows/container-promote.yml@c0aa80bb405fa24ede5ebcf1c40b0be90328386c
+    with:
+      image: ghcr.io/zavestudios/zavestudios-etl-runner
+      digest: ${{ inputs.digest }}
+      environment: ${{ inputs.environment }}
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
