@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   build:
-    uses: zavestudios/platform-pipelines/.github/workflows/container-build.yml@c0aa80bb405fa24ede5ebcf1c40b0be90328386c
+    uses: zavestudios/platform-pipelines/.github/workflows/container-build.yml@d6a1e8756e6bf0611a754dca4a139aa6a688f74a
     with:
       image_name: ${{ github.repository_owner }}/zavestudios-etl-runner
       dockerfile: Dockerfile
