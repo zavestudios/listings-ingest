@@ -26,6 +26,8 @@ SECURITY_CONTEXT = k8s.V1PodSecurityContext(
 )
 
 CONTAINER_SECURITY_CONTEXT = k8s.V1SecurityContext(
+    run_as_user=1000,
+    run_as_group=1000,
     run_as_non_root=True,
     allow_privilege_escalation=False,
     read_only_root_filesystem=True,
