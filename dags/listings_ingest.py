@@ -29,7 +29,7 @@ CONTAINER_SECURITY_CONTEXT = k8s.V1SecurityContext(
     run_as_non_root=True,
     allow_privilege_escalation=False,
     read_only_root_filesystem=True,
-    capabilities=k8s.V1Capabilities(drop=["ALL"]),
+    capabilities=k8s.V1Capabilities(add=[], drop=["ALL"]),
 )
 
 # Writable volume mounts for read-only filesystem
