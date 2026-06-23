@@ -47,18 +47,28 @@ VOLUMES = [
 
 
 def _secret_env_vars() -> list[k8s.V1EnvVar]:
-    """Build env vars from K8s Secret (ESO-sourced from Vault)"""
-    secret_name = "listings-ingest-db"
-    keys = ["DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_SSLMODE"]
-    return [
+    """Build env vars from K8s Secrets (ESO-sourced from Vault)"""
+    db_keys = ["DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_SSLMODE"]
+    storage_keys = ["MINIO_ACCESS_KEY", "MINIO_SECRET_KEY", "MINIO_ENDPOINT"]
+    env_vars = [
         k8s.V1EnvVar(
             name=key,
             value_from=k8s.V1EnvVarSource(
-                secret_key_ref=k8s.V1SecretKeySelector(name=secret_name, key=key)
+                secret_key_ref=k8s.V1SecretKeySelector(name="listings-ingest-db", key=key)
             ),
         )
-        for key in keys
+        for key in db_keys
     ]
+    env_vars += [
+        k8s.V1EnvVar(
+            name=key,
+            value_from=k8s.V1EnvVarSource(
+                secret_key_ref=k8s.V1SecretKeySelector(name="listings-ingest-storage", key=key)
+            ),
+        )
+        for key in storage_keys
+    ]
+    return env_vars
 
 
 def _job_args(stage: str) -> list[str]:
