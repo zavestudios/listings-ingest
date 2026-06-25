@@ -33,10 +33,10 @@ def _download_s3(s3_url: str) -> str:
         ),
     )
 
-    tmp = tempfile.NamedTemporaryFile(suffix=".csv", delete=False)
-    client.download_fileobj(bucket, key, tmp)
-    tmp.close()
-    return tmp.name
+    response = client.get_object(Bucket=bucket, Key=key)
+    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as tmp:
+        tmp.write(response["Body"].read())
+        return tmp.name
 
 
 def read_listings(path: str) -> list[dict]:
