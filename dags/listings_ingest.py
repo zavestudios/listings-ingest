@@ -131,7 +131,7 @@ with DAG(
             volumes=VOLUMES,
             env_vars=_secret_env_vars(),
             in_cluster=True,
-            on_finish_action="delete_pod",
+            on_finish_action="keep_pod",
             get_logs=True,
             do_xcom_push=False,
             container_resources=k8s.V1ResourceRequirements(

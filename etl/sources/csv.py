@@ -19,11 +19,15 @@ def _download_s3(s3_url: str) -> str:
             "MINIO_ENDPOINT, MINIO_ACCESS_KEY, and MINIO_SECRET_KEY must be set for s3:// paths"
         )
 
+    import botocore
+
     client = boto3.client(
         "s3",
         endpoint_url=endpoint,
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
+        verify=False,
+        config=botocore.config.Config(s3={"addressing_style": "path"}),
     )
 
     tmp = tempfile.NamedTemporaryFile(suffix=".csv", delete=False)
