@@ -27,7 +27,10 @@ def _download_s3(s3_url: str) -> str:
         aws_access_key_id=access_key,
         aws_secret_access_key=secret_key,
         verify=False,
-        config=botocore.config.Config(s3={"addressing_style": "path"}),
+        config=botocore.config.Config(
+            signature_version="s3v4",
+            s3={"addressing_style": "path"},
+        ),
     )
 
     tmp = tempfile.NamedTemporaryFile(suffix=".csv", delete=False)
